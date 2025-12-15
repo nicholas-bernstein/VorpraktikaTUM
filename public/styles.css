@@ -67,6 +67,21 @@ body {
     /* or whatever doesn't make it look like pixel vomit */
 }
 
+.logo-link {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.title-link {
+    text-decoration: none;
+    color: black;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
 .nav-links {
     display: flex;
     gap: 20px;
@@ -294,4 +309,56 @@ input[type="text"]:focus {
 
 .nav-hidden {
     display: none !important;
+}
+
+/* Calendar page */
+.calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 10px 5px 20px;
+}
+
+.month-block {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #d8d3ce;
+}
+
+.month-block:last-child {
+    border-bottom: none;
+}
+
+.calendar-month {
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.event-line {
+    margin: 4px 0;
+    line-height: 1.5;
+    color: #333;
+}
+
+.event-date {
+    color: #b44a4a;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.event-title {
+    text-decoration: underline;
+    color: #2f2f2f;
+    margin-right: 4px;
+}
+
+.event-desc {
+    color: #555;
+}
+
+.event-note {
+    color: #777;
+    font-style: italic;
 }
