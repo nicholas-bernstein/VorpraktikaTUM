@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Supabase Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="scripts.js"></script>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Supabase Diagnostic Test</h1>
+    <div id="results"></div>
+
+    <script>
+        async function runDiagnostics() {
+            const results = document.getElementById('results');
+            let output = '<h2>Test Results:</h2>';
+
+            // Test 1: Basic connection
+            output += '<h3>1. Testing Supabase Connection...</h3>';
+            try {
+                const { data, error } = await supabase.from('reviews').select('count', { count: 'exact', head: true });
+                if (error) {
+                    output += `<p class="error">❌ Connection Error: ${error.message}</p>`;
+                    output += `<pre>${JSON.stringify(error, null, 2)}</pre>`;
+                } else {
+                    output += `<p class="success">✅ Connection successful</p>`;
+                }
+            } catch (e) {
+                output += `<p class="error">❌ Exception: ${e.message}</p>`;
+            }
+
+            // Test 2: Try to fetch reviews with minimal columns
+            output += '<h3>2. Testing SELECT with minimal columns (id only)...</h3>';
+            try {
+                const { data, error } = await supabase
+                    .from('reviews')
+                    .select('id')
+                    .limit(5);
+                
+                if (error) {
+                    output += `<p class="error">❌ SELECT Error: ${error.message}</p>`;
+                    output += `<pre>${JSON.stringify(error, null, 2)}</pre>`;
+                } else {
+                    output += `<p class="success">✅ Found ${data ? data.length : 0} reviews (showing first 5)</p>`;
+                    if (data && data.length > 0) {
+                        output += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    }
+                }
+            } catch (e) {
+                output += `<p class="error">❌ Exception: ${e.message}</p>`;
+            }
+
+            // Test 3: Try to fetch with all columns (what your code actually does)
+            output += '<h3>3. Testing SELECT with all columns (as your code does)...</h3>';
+            try {
+                const { data, error } = await supabase
+                    .from('reviews')
+                    .select('id, company, website, reviewer_name, work_description, learning_value, atmosphere, would_recommend, tags, upvotes, created_at')
+                    .limit(5);
+                
+                if (error) {
+                    output += `<p class="error">❌ SELECT Error (full columns): ${error.message}</p>`;
+                    output += `<pre>${JSON.stringify(error, null, 2)}</pre>`;
+                } else {
+                    output += `<p class="success">✅ Found ${data ? data.length : 0} reviews with full columns</p>`;
+                    if (data && data.length > 0) {
+                        output += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    }
+                }
+            } catch (e) {
+                output += `<p class="error">❌ Exception: ${e.message}</p>`;
+            }
+
+            // Test 4: Check count
+            output += '<h3>4. Testing COUNT...</h3>';
+            try {
+                const { count, error } = await supabase
+                    .from('reviews')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (error) {
+                    output += `<p class="error">❌ COUNT Error: ${error.message}</p>`;
+                } else {
+                    output += `<p class="success">✅ Total reviews in database: ${count || 0}</p>`;
+                }
+            } catch (e) {
+                output += `<p class="error">❌ Exception: ${e.message}</p>`;
+            }
+
+            // Test 5: Check if function exists
+            output += '<h3>5. Testing increment_upvotes function...</h3>';
+            try {
+                // Just test if we can call it (we won't actually increment)
+                // This will fail if function doesn't exist or permissions are wrong
+                const { data, error } = await supabase
+                    .rpc('increment_upvotes', { review_id: '00000000-0000-0000-0000-000000000000' });
+                
+                // We expect an error because the UUID is fake, but that tells us the function exists
+                if (error && error.message.includes('not found') || error.message.includes('does not exist')) {
+                    output += `<p class="error">❌ Function doesn't exist or no permission: ${error.message}</p>`;
+                } else {
+                    output += `<p class="success">✅ Function exists (error is expected with fake UUID)</p>`;
+                }
+            } catch (e) {
+                output += `<p class="error">❌ Exception: ${e.message}</p>`;
+            }
+
+            results.innerHTML = output;
+        }
+
+        // Run diagnostics when page loads
+        runDiagnostics();
+    </script>
+</body>
+</html>

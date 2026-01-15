@@ -12,9 +12,20 @@ async function fetchReviews() {
 
     if (error) {
         console.error('Error fetching reviews:', error);
+        // Show error in page so you can see it
+        const container = document.querySelector('.subcontainer');
+        if (container) {
+            container.innerHTML = `<div style="padding: 20px; background: #ffebee; border: 2px solid red; margin: 20px;">
+                <h2>Error Loading Reviews</h2>
+                <p><strong>Error:</strong> ${error.message}</p>
+                <p><strong>Details:</strong></p>
+                <pre>${JSON.stringify(error, null, 2)}</pre>
+            </div>`;
+        }
         return [];
     }
 
+    console.log('Successfully fetched reviews:', data?.length || 0);
     return data;
 }
 
