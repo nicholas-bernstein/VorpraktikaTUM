@@ -15,3 +15,4 @@ ORDER BY
         ELSE 1 
     END,
     ordinal_position;
+

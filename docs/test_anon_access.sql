@@ -14,3 +14,4 @@ LIMIT 3;
 
 -- Reset back to postgres role
 RESET ROLE;
+

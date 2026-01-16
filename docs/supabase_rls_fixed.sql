@@ -44,3 +44,4 @@ GRANT EXECUTE ON FUNCTION increment_upvotes(uuid) TO anon;
 -- - Anonymous users can still insert reviews (with basic validation)
 -- - Anonymous users can only update via the secure function (upvotes only)
 -- - The function now has a fixed search_path to prevent security issues
+
