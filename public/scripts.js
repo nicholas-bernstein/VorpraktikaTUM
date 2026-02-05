@@ -1,11 +1,10 @@
 const SUPABASE_URL = "https://fqsuegrrtmazhgjhvsmr.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxc3VlZ3JydG1hemhnamh2c21yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3NDYxNDEsImV4cCI6MjA2MzMyMjE0MX0.nyUVXWRlFQcd8Nlp_3K4NXeUfCYROxIG6KJXL9-96Ls";
 
-// Create Supabase client - avoid redeclaration error
+// Create Supabase client - use var to avoid redeclaration error with CDN's global supabase
 if (!window.supabaseClient) {
     window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
-// Use var instead of const to avoid redeclaration error with CDN's global supabase
 var supabase = window.supabaseClient;
 
 async function fetchReviews() {
@@ -17,20 +16,9 @@ async function fetchReviews() {
 
     if (error) {
         console.error('Error fetching reviews:', error);
-        // Show error in page so you can see it
-        const container = document.querySelector('.subcontainer');
-        if (container) {
-            container.innerHTML = `<div style="padding: 20px; background: #ffebee; border: 2px solid red; margin: 20px;">
-                <h2>Error Loading Reviews</h2>
-                <p><strong>Error:</strong> ${error.message}</p>
-                <p><strong>Details:</strong></p>
-                <pre>${JSON.stringify(error, null, 2)}</pre>
-            </div>`;
-        }
         return [];
     }
 
-    console.log('Successfully fetched reviews:', data?.length || 0);
     return data;
 }
 

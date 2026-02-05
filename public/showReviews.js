@@ -1,24 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const container = document.querySelector('.subcontainer');
-    if (!container) {
-        console.error('Container .subcontainer not found!');
-        return;
-    }
+    if (!container) return;
 
-    console.log('Fetching reviews...');
     let allReviews = await fetchReviews();
-    console.log('Received reviews:', allReviews);
-    console.log('Number of reviews:', allReviews ? allReviews.length : 'null/undefined');
-
-    // If no reviews, show a message
     if (!allReviews || allReviews.length === 0) {
-        const filtersEl = container.querySelector('.filters');
-        container.innerHTML = '';
-        if (filtersEl) container.appendChild(filtersEl);
-        const message = document.createElement('div');
-        message.style.padding = '20px';
-        message.innerHTML = '<p>No reviews found. Check the browser console (F12) for errors.</p>';
-        container.appendChild(message);
         return;
     }
 
